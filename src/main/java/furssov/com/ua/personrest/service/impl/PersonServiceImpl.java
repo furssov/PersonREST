@@ -16,12 +16,9 @@ import java.util.Optional;
 
 @Service
 public class PersonServiceImpl implements PersonService {
-    private final PersonRepository personRepository;
-
     @Autowired
-    public PersonServiceImpl(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
+    private PersonRepository personRepository;
+
 
     @Override
     public Person save(Person person) {
@@ -34,7 +31,7 @@ public class PersonServiceImpl implements PersonService {
         List<Person> people =  personRepository.findAll();
         List<PersonDto> personDtos = new ArrayList<>();
 
-        people.forEach(person -> personDtos.add(new PersonDto(person.getName(), person.getSecondName(), Period.between(person.getDateOfBirth(), LocalDate.now()).getYears())));
+        people.forEach(person -> personDtos.add(new PersonDto(person.getName(), person.getSecondName(), countAge(person))));
 
         return personDtos;
     }
@@ -45,10 +42,16 @@ public class PersonServiceImpl implements PersonService {
 
         if (person.isPresent())
         {
-             Period period = Period.between( person.get().getDateOfBirth(), LocalDate.now());
-            PersonDto personDto = new PersonDto(person.get().getName(), person.get().getSecondName(), period.getYears());
+
+            PersonDto personDto = new PersonDto(person.get().getName(), person.get().getSecondName(), countAge(person.get()));
             return personDto;
         }
         else throw new NoSuchPersonException("no such person");
+    }
+
+    private int countAge(Person person)
+    {
+        Period period = Period.between( person.getDateOfBirth(), LocalDate.now());
+        return period.getYears();
     }
 }

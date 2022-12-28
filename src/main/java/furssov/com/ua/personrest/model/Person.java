@@ -14,13 +14,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "secondName")
+    @Column(name = "second_name")
     private String secondName;
 
     @Column(name = "date_of_birth")

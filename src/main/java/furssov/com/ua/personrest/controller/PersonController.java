@@ -7,10 +7,7 @@ import furssov.com.ua.personrest.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,12 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<PersonDto> getById(@PathVariable long id) throws NoSuchPersonException {
         return new ResponseEntity<>(personService.findById(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Person> addPerson(@RequestBody Person person)
+    {
+        personService.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
     }
 }
